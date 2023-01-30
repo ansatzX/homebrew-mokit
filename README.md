@@ -5,6 +5,17 @@ This repository provides package build instructions for [mokit](https://gitlab.c
 ## How do I install these formulae?
 You can install *mokit* by tapping this repository
 
+This repo require you install miniconda via homebrew and install numpy 
+
+```
+brew install --cask miniconda
+conda init bash (or zsh ) 
+conda activate base
+pip install numpy
+```
+
+Then 
+
 `brew install ansatzx/homebrew-mokit/mokit`
 
 Or `brew tap ansatzx/homebrew-mokit` and then `brew install mokit`.
@@ -13,6 +24,10 @@ Available programs are
 
 - [mokit](https://gitlab.com/jxzou/mokit):
   Molecular Orbital KIT
+
+## to-do
+
+This repo only support exe. program install, in the future f2py enhenced mokit will be supported.
 
 ## License
 
