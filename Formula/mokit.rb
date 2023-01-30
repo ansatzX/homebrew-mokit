@@ -12,8 +12,7 @@ class Mokit < Formula
             depends_on "gcc" => :build
             depends_on "gfortran" => :build
             depends_on "openblas" => :build
-            depends_on "numpy" => :build
-            depends_on "python" => :build
+            # depends_on "miniconda" => :build
             depends_on "make" => :build
         end
       end
@@ -22,10 +21,18 @@ class Mokit < Formula
         ENV.deparallelize
         cd "src" do
             system "cp", "#{HOMEBREW_PREFIX}/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.gnu_openblas_macos",  "."
-            system "make", "all", "-f", "Makefile.gnu_openblas_macos"
+            system "cp", "#{HOMEBREW_PREFIX}/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.main",  "."
+            system "make", "-f", "Makefile.gnu_openblas_macos", "exe"
         end
-        # prefix.install Dir["bin/*"]
+        prefix.install Dir["bin/*"]
     end
+
+    def caveats
+        <<~EOS
+          You need to take some manual steps in order to make this formula work:
+            export PATH=$PATH:"$(brew --prefix)/Cellar/mokit/1.2.4"
+        EOS
+      end
   
     
   end

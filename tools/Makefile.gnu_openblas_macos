@@ -5,14 +5,13 @@
 
 BIN = ../bin
 LIB = ../mokit/lib
-
+USE_CONDA = source $(HOMEBREW_PREFIX)/Caskroom/miniconda/base/bin/activate base 
 # --- gfortran + OpenBLAS ---
 F90    = gfortran
-CC = gcc    
 FFLAGS = -O2 -cpp -fPIC
-MKL_FLAGS = -L/opt/homebrew/opt/openblas/lib  -lopenblas
+MKL_FLAGS = -L$(HOMEBREW_PREFIX)/opt/openblas/lib  -lopenblas
 F2PY   = f2py
-F2_FLAGS = --fcompiler=gnu
+F2_FLAGS = 
 F2_F90_FLAGS = --f90flags="-cpp" 
 
 include Makefile.main
