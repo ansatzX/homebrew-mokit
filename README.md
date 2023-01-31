@@ -25,9 +25,6 @@ Available programs are
 - [mokit](https://gitlab.com/jxzou/mokit):
   Molecular Orbital KIT
 
-## to-do
-
-This repo only support exe. program install, in the future f2py enhenced mokit will be supported.
 
 ## License
 

@@ -30,7 +30,10 @@ class Mokit < Formula
     def caveats
         <<~EOS
           You need to take some manual steps in order to make this formula work:
-            export PATH=$PATH:"$(brew --prefix)/Cellar/mokit/1.2.4"
+            export MOKIT_ROOT="$(brew --prefix)/Cellar/mokit/master"
+            export PATH=$MOKIT_ROOT/bin:$PATH
+            export PYTHONPATH=$MOKIT_ROOT/lib:$PYTHONPATH
+            export LD_LIBRARY_PATH=$MOKIT_ROOT/lib:$LD_LIBRARY_PATH
         EOS
       end
   
