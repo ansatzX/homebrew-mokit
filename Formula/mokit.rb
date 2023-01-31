@@ -7,20 +7,19 @@ class Mokit < Formula
     license " Apache License 2.0"
 
     on_macos do
-        on_arm do
-            depends_on "gcc" => :build
-            depends_on "gfortran" => :build
-            depends_on "openblas" => :build
-            # depends_on "miniconda" => :build
-            depends_on "make" => :build
-        end
+
+        depends_on "gcc" => :build
+        depends_on "gfortran" => :build
+        depends_on "openblas" => :build
+        # depends_on "miniconda" => :build
+        depends_on "make" => :build
       end
   
     def install
         ENV.deparallelize
         cd "src" do
             system "cp", "#{HOMEBREW_PREFIX}/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.gnu_openblas_macos",  "."
-            system "cp", "#{HOMEBREW_PREFIX}/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.main",  "."
+            # system "cp", "#{HOMEBREW_PREFIX}/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.main",  "."
             system "make", "-f", "Makefile.gnu_openblas_macos", "all"
         end
         prefix.install Dir["bin"]
@@ -32,8 +31,8 @@ class Mokit < Formula
           You need to take some manual steps in order to make this formula work:
             export MOKIT_ROOT="$(brew --prefix)/Cellar/mokit/master"
             export PATH=$MOKIT_ROOT/bin:$PATH
-            export PYTHONPATH=$MOKIT_ROOT/lib:$PYTHONPATH
-            export LD_LIBRARY_PATH=$MOKIT_ROOT/lib:$LD_LIBRARY_PATH
+            export PYTHONPATH=$MOKIT_ROOT:$PYTHONPATH
+            export LD_LIBRARY_PATH=$MOKIT_ROOT/mokit/lib:$LD_LIBRARY_PATH
         EOS
       end
   
