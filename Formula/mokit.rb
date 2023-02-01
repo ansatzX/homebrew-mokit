@@ -2,7 +2,7 @@ class Mokit < Formula
     desc "Molecular Orbital KIT"
     homepage "https://gitlab.com/jxzou/mokit"
     url "https://gitlab.com/jxzou/mokit/-/archive/master/mokit-master.tar.gz"
-    sha256 "328fec4d07ea84782c9ecf8f2f9ae9f1e38750450e34035301494c62a44ebcc3"
+    # sha256 "328fec4d07ea84782c9ecf8f2f9ae9f1e38750450e34035301494c62a44ebcc3"
     version "master"
     license " Apache License 2.0"
 
