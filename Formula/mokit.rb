@@ -18,9 +18,9 @@ class Mokit < Formula
     def install
         ENV.deparallelize
         cd "src" do
-            system "cp", "#{HOMEBREW_PREFIX}/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.gnu_openblas_macos",  "."
+            # system "cp", "#{HOMEBREW_PREFIX}/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.gnu_openblas_macos",  "."
             # system "cp", "#{HOMEBREW_PREFIX}/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.main",  "."
-            system "make", "-f", "Makefile.gnu_openblas_macos", "all"
+            system "make", "-f", "Makefile.gnu_openblas_macos_brew", "all"
         end
         prefix.install Dir["bin"]
         prefix.install Dir["mokit"]
