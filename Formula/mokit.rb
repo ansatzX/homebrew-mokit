@@ -40,7 +40,12 @@ class Mokit < Formula
           system "pip3", "install", "numpy"
 
           cd "src" do
-              system "cp", "#{HOMEBREW_PREFIX}/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.gnu_openblas_macos",  "."
+              if Hardware::CPU.arm?
+                system "cp", "#{HOMEBREW_PREFIX}/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.gnu_openblas_macos",  "."
+              end
+              if Hardware::CPU.intel?
+                system "cp", "#{HOMEBREW_PREFIX}/Homebrew/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.gnu_openblas_macos",  "."
+              end
               # system "cp", "#{HOMEBREW_PREFIX}/Library/Taps/ansatzx/homebrew-mokit/tools/Makefile.main",  "."
               system "make", "-f", "Makefile.gnu_openblas_macos" , "#{args}"
           end
