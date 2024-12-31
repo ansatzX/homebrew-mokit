@@ -1,11 +1,11 @@
 class Mokit < Formula
     desc "Molecular Orbital KIT"
-    homepage "https://gitlab.com/jxzou/mokit"
-    url "https://gitlab.com/jxzou/mokit/-/archive/v1.2.5/mokit-v1.2.5.tar.gz"
+    homepage "https://github.com/1234zou/MOKIT"
+    url "https://gitlab.com/jxzou/mokit/-/archive/v1.2.6/mokit-v1.2.6.tar.gz"
     sha256 "5ffa4df60f48cf4bec41ccde1b388f9440521d0ba07755f854c74df4414acf5d"
-    version "v1.2.5-with-options"
+    version "v1.2.6-with-options"
     license " Apache License 2.0"
-    head "https://gitlab.com/jxzou/mokit.git", branch: "master"
+    head "https://github.com/1234zou/MOKIT", branch: "master"
     
     option "with-py38", "interface between fortran and python@3.8"
     option "with-py39", "interface between fortran and python@3.9"
