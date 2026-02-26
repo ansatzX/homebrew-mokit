@@ -1,59 +1,72 @@
 # AnsatzX Mokit_brew
 
-This repository provides package build instructions for [mokit](https://gitlab.com/jxzou/mokit) compatible with the [Homebrew toolchain](https://brew.sh).
+This repository provides Homebrew package build instructions for [MOKIT](https://github.com/1234zou/MOKIT) (Molecular Orbital KIT).
 
-## How do I install these formulae?
+## Installation
 
-You can install *mokit*  by tapping this repository
-
-### Install Releases with python plugins.
-
-```
-brew install ansatzx/homebrew-mokit/mokit --with-py39
-```
-
-Or
+### Step 1: Install MOKIT
 
 ```
 brew tap ansatzx/homebrew-mokit
-brew install mokit --with-py39 
+brew install mokit
 ```
 
-You have options `--with-pyxxx`, varying from 38 to 311, since m1 chips do not have 37 and lower python. 
+Or in one command:
 
-If you do not want python part (pyscf) of mokit, do not write this option.
+```
+brew install ansatzx/homebrew-mokit/mokit
+```
+
+### Step 2: Set up environment
+
+Add to your `~/.zshrc` or `~/.bashrc`:
+
+```bash
+export MOKIT_ROOT="$(brew --prefix mokit)"
+export PATH=$MOKIT_ROOT/bin:$PATH
+export LD_LIBRARY_PATH=$MOKIT_ROOT/mokit/lib:$LD_LIBRARY_PATH
+```
+
+### Step 3 (Optional): Compile Python modules
+
+If you need MOKIT's Python modules (for PySCF integration, etc.):
+
+1. Activate your Python environment (conda, uv, pyenv, Homebrew python, etc.)
+2. Ensure numpy is installed: `pip install numpy`
+3. Run:
+
+```
+mokit-compile-python
+```
+
+4. Add to your shell profile:
+
+```bash
+export PYTHONPATH=$MOKIT_ROOT:$PYTHONPATH
+```
+
+The Python modules are compiled against your active Python environment.
+If you switch Python versions, re-run `mokit-compile-python`.
 
 ### Install latest Git version (HEAD)
 
-Use option `--HEAD` to get latest commit
-
 ```
-brew install mokit --with-py39  --HEAD
+brew install ansatzx/homebrew-mokit/mokit --HEAD
 ```
 
-It's very suitable for pros.
-
-## Update 
+## Update
 
 ```
-brew update && brew upgrade mokit 
+brew update && brew upgrade mokit
 ```
 
-```
-brew update && brew upgrade mokit --fetch-HEAD
-```
+After upgrading, re-run `mokit-compile-python` if you use Python modules.
 
 ## Uninstall
 
 ```
 brew uninstall mokit
 ```
-
-Available programs are
-
-- [mokit](https://gitlab.com/jxzou/mokit):
-  Molecular Orbital KIT
-
 
 ## License
 

@@ -2,153 +2,220 @@ class Mokit < Formula
   desc "Molecular Orbital KIT"
   homepage "https://github.com/1234zou/MOKIT"
   url "https://gitlab.com/jxzou/mokit/-/archive/v1.2.6/mokit-v1.2.6.tar.gz"
-  sha256 "5ffa4df60f48cf4bec41ccde1b388f9440521d0ba07755f854c74df4414acf5d"
+  sha256 "6497ab45e4835a437d4fa770f72c5415531bdca22cfb8e7d99dd545b79fc27a9"
   version "1.2.6"
   license "Apache-2.0"
   head "https://github.com/1234zou/MOKIT", using: :git
 
-  # Options for python versions
-  option "with-py38", "Interface with python@3.8"
-  option "with-py39", "Interface with python@3.9"
-  option "with-py310", "Interface with python@3.10"
-  option "with-py311", "Interface with python@3.11"
-  option "with-py312", "Interface with python@3.12"
-
-  # Build dependencies
-  depends_on "gcc" => :build
-  depends_on "gfortran" => :build
-  depends_on "openblas" => :build
-  depends_on "make" => :build
-  depends_on "meson" => :build
-  depends_on "virtualenv" => :build
-
-  # Python dependencies based on options
-  depends_on "python@3.8" => :optional
-  depends_on "python@3.9" => :optional
-  depends_on "python@3.10" => :optional
-  depends_on "python@3.11" => :optional
-  depends_on "python@3.12" => :optional
-
-  # --- Numpy Wheel Resources ---
-  # We use pre-compiled wheels to avoid long compilation times.
-  # Resources are separated by CPU architecture.
-
-  on_intel do
-    # Numpy 1.26.0 for Python 3.8 on Intel macOS
-    resource "numpy_py38_x86_64" do
-      url "https://files.pythonhosted.org/packages/de/35/bf876c802456443f45357b79c491355a3f994a1b5353a38f61338855a250/numpy-1.26.0-cp38-cp38-macosx_11_0_x86_64.whl"
-      sha256 "e368d9215b55242253805d245f0c882d2c4a3c2338b8a5a98239433b3f7775a3"
-    end
-
-    # Numpy 1.26.0 for Python 3.9 on Intel macOS
-    resource "numpy_py39_x86_64" do
-      url "https://files.pythonhosted.org/packages/a8/b4/2c3596b33b9b3ac35528c2a4605f59a24f6a5c5b341a6242a438f39d041c/numpy-1.26.0-cp39-cp39-macosx_11_0_x86_64.whl"
-      sha256 "e33c191689233f62b934453a709525a4b881c430a6395a0f1e05c5a055b3a3e9"
-    end
-
-    # Numpy 1.26.0 for Python 3.10 on Intel macOS
-    resource "numpy_py310_x86_64" do
-      url "https://files.pythonhosted.org/packages/1f/c1/a2c3f3e83323b02a4ee942d2f45132ac30c69f3cc45006978c4c8025d5aa/numpy-1.26.0-cp310-cp310-macosx_11_0_x86_64.whl"
-      sha256 "5bb336443a5955651341a289b54403a4a38e3570b4a26b54a6b34d68c075345c"
-    end
-
-    # Numpy 1.26.0 for Python 3.11 on Intel macOS
-    resource "numpy_py311_x86_64" do
-      url "https://files.pythonhosted.org/packages/b7/48/3c03a7d69a07ec8a5852cf2b83c0c5a3a9d5042544e6fec732b55e36586c/numpy-1.26.0-cp311-cp311-macosx_11_0_x86_64.whl"
-      sha256 "b98deda0a8158054563435c1b83a9a01a17a246e5f6132f7d56f5b33bd934143"
-    end
-
-    # Numpy 1.26.0 for Python 3.12 on Intel macOS
-    resource "numpy_py312_x86_64" do
-      url "https://files.pythonhosted.org/packages/f1/6a/fe9f836e424f0b3d3f3fd9ac798ad9e4369b9997139a9f9c82f5b552a13c/numpy-1.26.0-cp312-cp312-macosx_11_0_x86_64.whl"
-      sha256 "a3cf352a30c5b43b68e1f434b9c4e2065d182b1b85b625585c9d028db58a003a"
-    end
-  end
-
-  on_arm do
-    # NOTE: No numpy wheel for Python 3.8 on ARM for this version.
-
-    # Numpy 1.26.0 for Python 3.9 on ARM macOS
-    resource "numpy_py39_arm64" do
-      url "https://files.pythonhosted.org/packages/3a/d2/5c0663133a425a94248a438f34d2453778bc663e6d727d9a31aa3143d74d/numpy-1.26.0-cp39-cp39-macosx_11_0_arm64.whl"
-      sha256 "003a3c45f53968e582f35535a65e3a834b2bded54d69e4321c462f683b443349"
-    end
-
-    # Numpy 1.26.0 for Python 3.10 on ARM macOS
-    resource "numpy_py310_arm64" do
-      url "https://files.pythonhosted.org/packages/2c/34/215c47333b0bbfb3f4c45f4a1b333c2d23eb2d548e484a5c36f33bf2305a/numpy-1.26.0-cp310-cp310-macosx_12_0_arm64.whl"
-      sha256 "9e1c714033e405341f01643330c0a836a369f08c3c0d04e3214a28f85c1d7a79"
-    end
-
-    # Numpy 1.26.0 for Python 3.11 on ARM macOS
-    resource "numpy_py311_arm64" do
-      url "https://files.pythonhosted.org/packages/a0/99/1afc3eade1778cca549ca0e7448ec5f6b9a3815e3ed3b24cea4245c1b06a/numpy-1.26.0-cp311-cp311-macosx_12_0_arm64.whl"
-      sha256 "a4a97c6f72e05a6d682559b3f99a1052a0f940186a2234a5a2075d854b675d49"
-    end
-
-    # Numpy 1.26.0 for Python 3.12 on ARM macOS
-    resource "numpy_py312_arm64" do
-      url "https://files.pythonhosted.org/packages/a4/a7/a4a6c3f9a040016b0a49e604c0a445605de01b5b6d8841053a99f33f3fe3/numpy-1.26.0-cp312-cp312-macosx_12_0_arm64.whl"
-      sha256 "3e991f47d9c0d673a16a31f6524f5b18941c22383f9dc60d495a81c820b37312"
-    end
-  end
+  # Runtime dependencies: kept after install so mokit-compile-python can work
+  depends_on "gcc"
+  depends_on "openblas"
+  depends_on "make"
 
   def install
-    # Check for unsupported configurations
-    if build.with?("py38") && Hardware::CPU.arm?
-      odie "MOKIT with Python 3.8 is not supported on Apple Silicon (ARM) due to the lack of a pre-compiled numpy wheel."
-    end
-
-    # Determine if a python build is needed and which dependency to use
-    py_build_opt = ARGV.options_only.find { |arg| arg.start_with?("--with-py") }
-    py_build = py_build_opt.present?
-
-    build_args = "exe"
-    
-    if py_build
-      build_args = "all"
-      py_version_num = py_build_opt.delete_prefix("--with-py") # "38", "39", etc.
-      py_version_str = py_version_num.insert(1, ".") # "3.8", "3.9"
-      py_dep = "python@#{py_version_str}"
-      arch_str = Hardware::CPU.arch == :arm ? "arm64" : "x86_64"
-      resource_name = "numpy_py#{py_version_num}_#{arch_str}"
-
-      # Create a virtualenv
-      venv_dir = buildpath/"venv"
-      python_exec = Formula[py_dep].opt_bin/"python3"
-      system "virtualenv", "--python=#{python_exec}", venv_dir
-      
-      # Set PATH to use the virtualenv's python and pip
-      ENV.prepend_path "PATH", venv_dir/"bin"
-
-      # Install the correct numpy wheel from resources
-      resource(resource_name).stage do |res|
-        system "pip", "install", res.glob("*.whl").first
-      end
-    end
-
     ENV.deparallelize
-    pkgshare.install "tools"
 
+    # Generate platform Makefile for Homebrew (tarball has src/Makefile.main)
+    openblas = Formula["openblas"].opt_lib
+    (buildpath/"src/Makefile.brew").write <<~MAKEFILE
+      BIN = ../bin
+      LIB = ../mokit/lib
+      USE_CONDA = true
+      F90    = gfortran
+      FFLAGS = -O2 -cpp -fPIC
+      MKL_FLAGS = -L#{openblas} -lopenblas
+      F2PY   = python3 -m numpy.f2py
+      F2_FLAGS =
+      F2_F90_FLAGS = --f90flags="-cpp"
+
+      include Makefile.main
+    MAKEFILE
+
+    # Build executables only (no Python modules)
     cd "src" do
-      cp pkgshare/"tools/Makefile.gnu_openblas_macos", "."
-      system "make", "-f", "Makefile.gnu_openblas_macos", build_args
+      system "make", "-f", "Makefile.brew", "exe"
     end
 
+    # Install executables and the mokit Python package directory
     prefix.install "bin", "mokit"
+
+    # Ensure mokit/lib directory exists for future .so files
+    (prefix/"mokit/lib").mkpath
+
+    # Save source files from tarball for later Python module compilation
+    (pkgshare/"src").mkpath
+    cp Dir["src/*.f90"], pkgshare/"src/"
+    cp "src/Makefile.main", pkgshare/"src/"
+
+    # Generate and install the mokit-compile-python script
+    (bin/"mokit-compile-python").write compile_python_script
+    (bin/"mokit-compile-python").chmod 0755
   end
 
   def caveats
     <<~EOS
-      To use MOKIT, you need to set the following environment variables:
+      MOKIT executables are installed and ready to use.
+
+      To set up your environment, add to your shell profile:
         export MOKIT_ROOT="$(brew --prefix mokit)"
         export PATH=$MOKIT_ROOT/bin:$PATH
-        export PYTHONPATH=$MOKIT_ROOT:$PYTHONPATH
         export LD_LIBRARY_PATH=$MOKIT_ROOT/mokit/lib:$LD_LIBRARY_PATH
+
+      For Python modules (PySCF integration, etc.):
+        1. Activate your Python environment (conda, uv, pyenv, etc.)
+        2. Ensure numpy is installed: pip install numpy
+        3. Run: mokit-compile-python
+        4. Add to your shell profile:
+             export PYTHONPATH=$MOKIT_ROOT:$PYTHONPATH
+
+      Re-run mokit-compile-python after upgrading MOKIT or switching Python versions.
     EOS
   end
 
   test do
-    system "#{bin}/mokit", "--help"
+    assert_predicate bin/"automr", :exist?
+    assert_predicate bin/"mokit-compile-python", :exist?
+    assert_predicate share/"mokit/src/Makefile.main", :exist?
+  end
+
+  private
+
+  def compile_python_script
+    <<~'BASH'
+    #!/bin/bash
+    #
+    # mokit-compile-python: Compile MOKIT Python modules for the active Python environment.
+    #
+    # Usage: Activate your Python environment (conda, uv, pyenv, etc.), then run:
+    #   mokit-compile-python
+    #
+    # Prerequisites: numpy must be installed in the active Python environment.
+    #
+    set -euo pipefail
+
+    # ── Resolve paths ────────────────────────────────────────────────────────
+
+    HOMEBREW_PREFIX="$(brew --prefix)"
+    MOKIT_PREFIX="$(brew --prefix mokit)"
+
+    # Find gfortran from Homebrew's gcc
+    GCC_OPT="$HOMEBREW_PREFIX/opt/gcc/bin"
+    GFORTRAN=""
+    if [ -d "$GCC_OPT" ]; then
+        # Prefer versioned gfortran (e.g. gfortran-14), skip cross-compiler prefixes
+        GFORTRAN="$(find "$GCC_OPT" -name 'gfortran-[0-9]*' -not -name '*-apple-*' 2>/dev/null | sort -V | tail -1)"
+        # Fallback to unversioned symlink
+        if [ -z "$GFORTRAN" ] && [ -x "$GCC_OPT/gfortran" ]; then
+            GFORTRAN="$GCC_OPT/gfortran"
+        fi
+    fi
+    if [ -z "$GFORTRAN" ]; then
+        echo "Error: gfortran not found in $GCC_OPT" >&2
+        echo "  Run: brew install gcc" >&2
+        exit 1
+    fi
+
+    # OpenBLAS
+    OPENBLAS_LIB="$HOMEBREW_PREFIX/opt/openblas/lib"
+    if [ ! -d "$OPENBLAS_LIB" ]; then
+        echo "Error: OpenBLAS not found at $OPENBLAS_LIB" >&2
+        echo "  Run: brew install openblas" >&2
+        exit 1
+    fi
+
+    # Python
+    if ! command -v python3 &>/dev/null; then
+        echo "Error: python3 not found in PATH." >&2
+        echo "  Activate your Python environment before running this script." >&2
+        exit 1
+    fi
+
+    if ! python3 -c "import numpy" 2>/dev/null; then
+        echo "Error: numpy not found in the active Python environment." >&2
+        echo "  Install it with: pip install numpy" >&2
+        exit 1
+    fi
+
+    # Source files
+    MOKIT_SRC="$MOKIT_PREFIX/share/mokit/src"
+    if [ ! -d "$MOKIT_SRC" ]; then
+        echo "Error: MOKIT source files not found at $MOKIT_SRC" >&2
+        echo "  Reinstall MOKIT: brew reinstall mokit" >&2
+        exit 1
+    fi
+
+    MOKIT_LIB="$MOKIT_PREFIX/mokit/lib"
+
+    # ── Display configuration ────────────────────────────────────────────────
+
+    PYTHON3="$(which python3)"
+    PYTHON_VERSION="$(python3 --version 2>&1)"
+    NUMPY_VERSION="$(python3 -c 'import numpy; print(numpy.__version__)')"
+
+    echo "=== mokit-compile-python ==="
+    echo "gfortran:    $GFORTRAN"
+    echo "openblas:    $OPENBLAS_LIB"
+    echo "python3:     $PYTHON3 ($PYTHON_VERSION)"
+    echo "numpy:       $NUMPY_VERSION"
+    echo "source dir:  $MOKIT_SRC"
+    echo "output dir:  $MOKIT_LIB"
+    echo ""
+
+    # ── Build in temporary directory ─────────────────────────────────────────
+
+    WORKDIR="$(mktemp -d)"
+    trap 'rm -rf "$WORKDIR"' EXIT
+
+    # Create directory structure expected by Makefile.main
+    mkdir -p "$WORKDIR/src"
+    mkdir -p "$WORKDIR/bin"
+    mkdir -p "$WORKDIR/mokit/lib"
+
+    # Copy source files
+    cp "$MOKIT_SRC"/*.f90 "$WORKDIR/src/"
+    cp "$MOKIT_SRC/Makefile.main" "$WORKDIR/src/"
+
+    # Generate platform Makefile with absolute paths
+    cat > "$WORKDIR/src/Makefile.gnu_openblas_macos" <<MAKEFILE
+    BIN = ../bin
+    LIB = ../mokit/lib
+    USE_CONDA = true
+    F90    = $GFORTRAN
+    FFLAGS = -O2 -cpp -fPIC
+    MKL_FLAGS = -L$OPENBLAS_LIB -lopenblas
+    F2PY   = $PYTHON3 -m numpy.f2py
+    F2_FLAGS = --f90exec=$GFORTRAN --f90flags="-cpp -I\$(CURDIR)"
+    F2_F90_FLAGS =
+
+    include Makefile.main
+    MAKEFILE
+
+    echo "Compiling Python modules (this may take a few minutes)..."
+    echo ""
+
+    cd "$WORKDIR/src"
+    # Export FFLAGS so meson backend (numpy >= 2.0) picks up -cpp and -I for .mod files
+    export FFLAGS="-O2 -cpp -fPIC -I$WORKDIR/src"
+    export FCFLAGS="$FFLAGS"
+    make -f Makefile.gnu_openblas_macos pymodules 2>&1
+
+    # ── Install .so files ────────────────────────────────────────────────────
+
+    echo ""
+    echo "Removing old .so files from $MOKIT_LIB/"
+    rm -f "$MOKIT_LIB"/*.so
+
+    echo "Installing new .so files to $MOKIT_LIB/"
+    cp "$WORKDIR/mokit/lib"/*.so "$MOKIT_LIB/"
+    ls -la "$MOKIT_LIB"/*.so
+
+    echo ""
+    echo "=== Done! ==="
+    echo "$PYTHON_VERSION modules installed."
+    echo ""
+    echo "Make sure your environment includes:"
+    echo "  export MOKIT_ROOT=\"\$(brew --prefix mokit)\""
+    echo "  export PYTHONPATH=\$MOKIT_ROOT:\$PYTHONPATH"
+    BASH
   end
 end
