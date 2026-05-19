@@ -1,64 +1,55 @@
-# AnsatzX Mokit_brew
+# homebrew-mokit
 
-This repository provides package build instructions for [mokit](https://gitlab.com/jxzou/mokit) compatible with the [Homebrew toolchain](https://brew.sh).
+Homebrew formula for [MOKIT](https://github.com/1234zou/MOKIT) (Molecular Orbital KIT).
 
-## How do I install these formulae?
+## Install
 
-You can install *mokit*  by tapping this repository
-
-### Install Releases with python plugins.
-
-```
-brew install ansatzx/homebrew-mokit/mokit --with-py39
+```bash
+brew tap ansatzx/mokit
+brew install mokit
 ```
 
-Or
+Dependencies: `gcc`, `make`, `openblas`, `uv`.
 
-```
-brew tap ansatzx/homebrew-mokit
-brew install mokit --with-py39 
-```
+## Environment
 
-You have options `--with-pyxxx`, varying from 38 to 311, since m1 chips do not have 37 and lower python. 
+Add to `~/.zshrc` or `~/.bashrc`:
 
-If you do not want python part (pyscf) of mokit, do not write this option.
-
-### Install latest Git version (HEAD)
-
-Use option `--HEAD` to get latest commit
-
-```
-brew install mokit --with-py39  --HEAD
+```bash
+export MOKIT_ROOT="$(brew --prefix mokit)"
+export PATH="$MOKIT_ROOT/bin:$PATH"
+export LD_LIBRARY_PATH="$MOKIT_ROOT/mokit/lib:$LD_LIBRARY_PATH"
 ```
 
-It's very suitable for pros.
+## Python modules
 
-## Update 
+`mokit-compile-python` builds and installs the Python package into your active environment (via `pip install .`). No `PYTHONPATH` needed.
 
-```
-brew update && brew upgrade mokit 
+```bash
+# activate your Python environment, then:
+pip install numpy
+mokit-compile-python
 ```
 
+Three invocation modes:
+
+```bash
+mokit-compile-python                              # use python3 from PATH
+mokit-compile-python --python 3.12                # auto-create uv venv
+mokit-compile-python --python /path/to/venv/bin/python  # explicit interpreter
 ```
-brew update && brew upgrade mokit --fetch-HEAD
+
+Re-run after upgrading MOKIT or switching Python versions.
+
+## Update
+
+```bash
+brew upgrade mokit
 ```
 
 ## Uninstall
 
-```
+```bash
 brew uninstall mokit
+brew untap ansatzx/mokit
 ```
-
-Available programs are
-
-- [mokit](https://gitlab.com/jxzou/mokit):
-  Molecular Orbital KIT
-
-
-## License
-
-The package build files are available under a BSD-2-Clause license.
-
-## Documentation
-
-`brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).

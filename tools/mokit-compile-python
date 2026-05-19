@@ -1,0 +1,91 @@
+#!/bin/bash
+# mokit-compile-python — compile MOKIT Python modules.
+#
+#   mokit-compile-python                     # use python3 from PATH
+#   mokit-compile-python --python 3.12       # uv venv with Python 3.12
+#   mokit-compile-python --python /path/to/python  # use specific interpreter
+#
+set -euo pipefail
+
+# ── Parse args ───────────────────────────────────────────────────────────
+PYTHON="python3"
+USE_UV_VENV=false
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --python) PYTHON="$2"; shift 2 ;;
+        --python=*) PYTHON="${1#*=}"; shift ;;
+        *) echo "Usage: mokit-compile-python [--python VERSION|/path/to/python]" >&2; exit 1 ;;
+    esac
+done
+
+# If PYTHON looks like a version (e.g. "3.12"), use uv to create a temp venv
+if [[ "$PYTHON" =~ ^[0-9]+\.[0-9]+$ ]]; then
+    USE_UV_VENV=true
+    VENV_DIR="$(mktemp -d)"
+    trap 'rm -rf "$VENV_DIR"' EXIT
+    uv venv --python "$PYTHON" --seed "$VENV_DIR" >/dev/null 2>&1
+    export PATH="$VENV_DIR/bin:$PATH"
+    "$VENV_DIR/bin/pip" install --quiet numpy
+    PYTHON="$VENV_DIR/bin/python3"
+fi
+
+command -v gfortran &>/dev/null || { echo "Error: gfortran not found. brew install gcc" >&2; exit 1; }
+command -v "$PYTHON" &>/dev/null  || { echo "Error: $PYTHON not found." >&2; exit 1; }
+"$PYTHON" -c "import numpy" 2>/dev/null || { echo "Error: numpy not found. pip install numpy" >&2; exit 1; }
+
+MOKIT_PKGSHARE="$(brew --prefix mokit)/share/mokit"
+[ -f "$MOKIT_PKGSHARE/pyproject.toml" ] || { echo "Error: pyproject.toml not found. brew reinstall ansatzx/mokit/mokit" >&2; exit 1; }
+
+if command -v uv &>/dev/null && [ "$PYTHON" = "python3" ]; then
+    PIP="uv pip"
+else
+    $PYTHON -m ensurepip --default-pip 2>/dev/null || true
+    PIP="$PYTHON -m pip"
+fi
+
+echo "=== mokit-compile-python ==="
+echo "python3:  $PYTHON ($("$PYTHON" --version 2>&1))"
+echo "numpy:    $("$PYTHON" -c 'import numpy; print(numpy.__version__)')"
+echo "gfortran: $(command -v gfortran)"
+echo "installer: $PIP"
+echo ""
+
+if "$PYTHON" -c "import setuptools; exit(0 if int(setuptools.__version__.split('.')[0]) >= 80 else 1)" 2>/dev/null; then
+    echo "Downgrading setuptools..."
+    $PIP install --quiet "setuptools>=61.0,<80"
+fi
+
+# ── Build ────────────────────────────────────────────────────────────────
+WORKDIR="$(mktemp -d)"
+$USE_UV_VENV || trap 'rm -rf "$WORKDIR"' EXIT
+cp -a "$MOKIT_PKGSHARE/." "$WORKDIR/"
+
+HOMEBREW_PREFIX="$(brew --prefix)"
+GFORTRAN="$(command -v gfortran)"
+
+cat > "$WORKDIR/src/Makefile.gnu_openblas_macos" <<MAKEFILE
+BIN = ../bin
+LIB = ../mokit/lib
+F90    = $GFORTRAN
+FFLAGS = -O2 -cpp -fPIC
+MKL_FLAGS = -L$HOMEBREW_PREFIX/opt/openblas/lib -lopenblas
+F2PY   = $PYTHON -m numpy.f2py
+F2_FLAGS = --f90exec=$GFORTRAN --f90flags="-cpp -I$WORKDIR/src"
+F2_F90_FLAGS =
+
+include Makefile.main
+MAKEFILE
+
+echo "Compiling Python modules..."
+cd "$WORKDIR/src"
+export FFLAGS="-O2 -cpp -fPIC -I$WORKDIR/src"
+export FCFLAGS="$FFLAGS"
+make -j1 -f Makefile.gnu_openblas_macos pymodules 2>&1
+
+cd "$WORKDIR"
+echo ""
+$PIP uninstall -y mokit 2>/dev/null || true
+$PIP install . --no-deps
+
+echo ""
+echo "=== Done! mokit installed for $("$PYTHON" --version 2>&1) ==="
