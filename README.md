@@ -1,77 +1,55 @@
-# AnsatzX Mokit_brew
+# homebrew-mokit
 
-This repository provides Homebrew package build instructions for [MOKIT](https://github.com/1234zou/MOKIT) (Molecular Orbital KIT).
+Homebrew formula for [MOKIT](https://github.com/1234zou/MOKIT) (Molecular Orbital KIT).
 
-## Installation
+## Install
 
-### Step 1: Install MOKIT
-
-```
-brew tap ansatzx/homebrew-mokit
+```bash
+brew tap ansatzx/mokit
 brew install mokit
 ```
 
-Or in one command:
+Dependencies: `gcc`, `make`, `openblas`, `uv`.
 
-```
-brew install ansatzx/homebrew-mokit/mokit
-```
+## Environment
 
-### Step 2: Set up environment
-
-Add to your `~/.zshrc` or `~/.bashrc`:
+Add to `~/.zshrc` or `~/.bashrc`:
 
 ```bash
 export MOKIT_ROOT="$(brew --prefix mokit)"
-export PATH=$MOKIT_ROOT/bin:$PATH
-export LD_LIBRARY_PATH=$MOKIT_ROOT/mokit/lib:$LD_LIBRARY_PATH
+export PATH="$MOKIT_ROOT/bin:$PATH"
+export LD_LIBRARY_PATH="$MOKIT_ROOT/mokit/lib:$LD_LIBRARY_PATH"
 ```
 
-### Step 3 (Optional): Compile Python modules
+## Python modules
 
-If you need MOKIT's Python modules (for PySCF integration, etc.):
+`mokit-compile-python` builds and installs the Python package into your active environment (via `pip install .`). No `PYTHONPATH` needed.
 
-1. Activate your Python environment (conda, uv, pyenv, Homebrew python, etc.)
-2. Ensure numpy is installed: `pip install numpy`
-3. Run:
-
-```
+```bash
+# activate your Python environment, then:
+pip install numpy
 mokit-compile-python
 ```
 
-4. Add to your shell profile:
+Three invocation modes:
 
 ```bash
-export PYTHONPATH=$MOKIT_ROOT:$PYTHONPATH
+mokit-compile-python                              # use python3 from PATH
+mokit-compile-python --python 3.12                # auto-create uv venv
+mokit-compile-python --python /path/to/venv/bin/python  # explicit interpreter
 ```
 
-The Python modules are compiled against your active Python environment.
-If you switch Python versions, re-run `mokit-compile-python`.
-
-### Install latest Git version (HEAD)
-
-```
-brew install ansatzx/homebrew-mokit/mokit --HEAD
-```
+Re-run after upgrading MOKIT or switching Python versions.
 
 ## Update
 
+```bash
+brew upgrade mokit
 ```
-brew update && brew upgrade mokit
-```
-
-After upgrading, re-run `mokit-compile-python` if you use Python modules.
 
 ## Uninstall
 
-```
+```bash
 brew uninstall mokit
+brew untap ansatzx/mokit
 ```
-
-## License
-
-The package build files are available under a BSD-2-Clause license.
-
-## Documentation
-
-`brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
